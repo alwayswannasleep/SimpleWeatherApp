@@ -16,6 +16,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            debuggable true
+
+            buildConfigField "String", "API_URL", "\"http://api.openweathermap.org/\""
+            buildConfigField "String", "API_KEY", "\"3140cb3ae69a07e4294164cee1cc9786\""
+        }
     }
 }
 

@@ -17,7 +17,7 @@ public class WApplication extends Application {
         super.onCreate();
 
         dbFacade = new DbManager(this);
-        netFacade = new NetManager();
+        netFacade = new NetManager(dbFacade);
     }
 
     public DbFacade getDbFacade() {

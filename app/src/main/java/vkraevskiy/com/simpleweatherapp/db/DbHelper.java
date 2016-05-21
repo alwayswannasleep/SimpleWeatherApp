@@ -20,12 +20,12 @@ class DbHelper extends SQLiteOpenHelper {
                     City._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     City.COLUMN_NAME_CITY_NAME + TEXT_TYPE + COMA_SEP +
                     City.COLUMN_NAME_COUNTRY_NAME + TEXT_TYPE + COMA_SEP +
-                    City.COLUMN_NAME_SYNC_TIMESTAMP + TEXT_TYPE +
+                    City.COLUMN_NAME_SYNC_TIMESTAMP + INTEGER_TYPE +
                     ")";
 
     private static final String CREATE_FORECASTS =
             "CREATE TABLE " + Forecast.TABLE_NAME + " (" +
-                    Forecast._ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    Forecast._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     Forecast.COLUMN_NAME_PRESSURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_TEMPERATURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMA_SEP +
@@ -36,6 +36,7 @@ class DbHelper extends SQLiteOpenHelper {
                     Forecast.COLUMN_NAME_TIMESTAMP + INTEGER_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WIND_DEGREE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WIND_SPEED + REAL_TYPE + COMA_SEP +
+                    Forecast.COLUMN_NAME_CLOUDINESS + REAL_TYPE + COMA_SEP +
                     "FOREIGN KEY (" + Forecast.COLUMN_NAME_CITY_ID + ") REFERENCES " + City.TABLE_NAME + "(" + City._ID + ")" +
                     ")";
 
@@ -68,14 +69,14 @@ class DbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    private static final class City implements BaseColumns {
+    static final class City implements BaseColumns {
         public static final String TABLE_NAME = "cities";
         public static final String COLUMN_NAME_CITY_NAME = "city_name";
         public static final String COLUMN_NAME_COUNTRY_NAME = "country_name";
         public static final String COLUMN_NAME_SYNC_TIMESTAMP = "sync_timestamp";
     }
 
-    private static final class Forecast implements BaseColumns {
+    static final class Forecast implements BaseColumns {
         public static final String TABLE_NAME = "forecasts";
         public static final String COLUMN_NAME_CITY_ID = "city_id";
         public static final String COLUMN_NAME_TIMESTAMP = "timestamp";
@@ -87,5 +88,6 @@ class DbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_WIND_DEGREE = "wind_degree";
         public static final String COLUMN_NAME_TEMPERATURE = "temp";
         public static final String COLUMN_NAME_PRESSURE = "pressure";
+        public static final String COLUMN_NAME_CLOUDINESS = "cloudiness";
     }
 }
