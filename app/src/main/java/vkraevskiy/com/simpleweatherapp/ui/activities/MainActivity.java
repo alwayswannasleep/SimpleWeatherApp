@@ -1,7 +1,9 @@
-package vkraevskiy.com.simpleweatherapp;
+package vkraevskiy.com.simpleweatherapp.ui.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import vkraevskiy.com.simpleweatherapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
