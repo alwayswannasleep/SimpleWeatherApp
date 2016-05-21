@@ -6,9 +6,6 @@ import java.util.List;
 
 public class Forecast {
 
-    @SerializedName("id")
-    private long id;
-
     @SerializedName("main")
     private Main main;
 
@@ -23,14 +20,6 @@ public class Forecast {
 
     @SerializedName("dt")
     private long timestamp;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Main getMain() {
         return main;
@@ -72,7 +61,7 @@ public class Forecast {
         this.timestamp = timestamp;
     }
 
-    private static final class Main {
+    public static final class Main {
         @SerializedName("temp")
         private float temp;
 
@@ -107,7 +96,7 @@ public class Forecast {
         }
     }
 
-    private static final class Weather {
+    public static final class Weather {
         @SerializedName("id")
         private long id;
 
@@ -153,7 +142,7 @@ public class Forecast {
         }
     }
 
-    private static final class Clouds {
+    public static final class Clouds {
         @SerializedName("all")
         private float cloudiness;
 
@@ -166,7 +155,7 @@ public class Forecast {
         }
     }
 
-    private static final class Wind {
+    public static final class Wind {
         @SerializedName("speed")
         private float speed;
 

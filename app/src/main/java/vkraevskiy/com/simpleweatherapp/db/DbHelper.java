@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-class DbHelper extends SQLiteOpenHelper {
+final class DbHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "DBName";
     private static final int VERSION = 1;
@@ -25,7 +25,6 @@ class DbHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_FORECASTS =
             "CREATE TABLE " + Forecast.TABLE_NAME + " (" +
-                    Forecast._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     Forecast.COLUMN_NAME_PRESSURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_TEMPERATURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMA_SEP +
@@ -33,7 +32,7 @@ class DbHelper extends SQLiteOpenHelper {
                     Forecast.COLUMN_NAME_WEATHER_DESCRIPTION + TEXT_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WEATHER_MAIN + TEXT_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WEATHER_ICON + TEXT_TYPE + COMA_SEP +
-                    Forecast.COLUMN_NAME_TIMESTAMP + INTEGER_TYPE + COMA_SEP +
+                    Forecast.COLUMN_NAME_TIMESTAMP + INTEGER_TYPE + " PRIMARY KEY," +
                     Forecast.COLUMN_NAME_WIND_DEGREE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WIND_SPEED + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_CLOUDINESS + REAL_TYPE + COMA_SEP +

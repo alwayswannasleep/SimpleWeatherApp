@@ -10,10 +10,10 @@ import vkraevskiy.com.simpleweatherapp.core.bridge.DbFacade;
 import vkraevskiy.com.simpleweatherapp.db.model.City;
 import vkraevskiy.com.simpleweatherapp.db.model.Forecast;
 
-public class DbManager extends Observable implements DbFacade {
+public final class DbManager extends Observable implements DbFacade {
 
     private CitiesDao citiesDao;
-
+    private ForecastsDao forecastsDao;
 
     public DbManager(Context context) {
         DbHelper dbHelper = new DbHelper(context);
@@ -21,6 +21,7 @@ public class DbManager extends Observable implements DbFacade {
         writableDatabase.setForeignKeyConstraintsEnabled(true);
 
         citiesDao = new CitiesDao(writableDatabase);
+        forecastsDao = new ForecastsDao(writableDatabase);
     }
 
 
@@ -40,6 +41,9 @@ public class DbManager extends Observable implements DbFacade {
 
     @Override
     public void saveForecast(List<Forecast> forecasts, City city) {
+        forecastsDao.save(forecasts, city);
 
+        setChanged();
+        notifyObservers();
     }
 }

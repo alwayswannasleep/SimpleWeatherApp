@@ -46,7 +46,7 @@ public class NetManager implements NetFacade {
     }
 
     @Override
-    public void loadForecast(final long latitude, final long longitude, final NetCallback netCallback) {
+    public void loadForecast(final double latitude, final double longitude, final NetCallback netCallback) {
         dbFacade.onStartLoading();
 
         executor.execute(new Runnable() {

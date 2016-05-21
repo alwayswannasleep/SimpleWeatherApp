@@ -1,15 +1,11 @@
 package vkraevskiy.com.simpleweatherapp.db;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 
 import vkraevskiy.com.simpleweatherapp.db.model.City;
 
 final class CitiesDao {
-
-    private static final String SAVE_SQL =
-            "INSERT INTO " + DbHelper.City.TABLE_NAME + " VALUES (?, ?, ?, ?)";
-
     private SQLiteDatabase database;
 
     CitiesDao(SQLiteDatabase database) {
@@ -17,14 +13,16 @@ final class CitiesDao {
     }
 
     void save(City city) {
-        SQLiteStatement statement = database.compileStatement(SAVE_SQL);
+        ContentValues values = new ContentValues();
+        values.put(DbHelper.City._ID, city.getId());
+        values.put(DbHelper.City.COLUMN_NAME_CITY_NAME, city.getName());
+        values.put(DbHelper.City.COLUMN_NAME_COUNTRY_NAME, city.getCountry());
+        values.put(DbHelper.City.COLUMN_NAME_SYNC_TIMESTAMP, city.getSyncTimestamp());
 
-        int index = 1;
-        statement.bindLong(index++, city.getId());
-        statement.bindString(index++, city.getName());
-        statement.bindString(index++, city.getCountry());
-        statement.bindLong(index, city.getSyncTimestamp());
-
-        statement.execute();
+        database.insertWithOnConflict(
+                DbHelper.City.TABLE_NAME,
+                null,
+                values,
+                SQLiteDatabase.CONFLICT_REPLACE);
     }
 }

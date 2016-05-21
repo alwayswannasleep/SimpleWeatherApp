@@ -2,7 +2,7 @@ package vkraevskiy.com.simpleweatherapp.db.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class City {
+public final class City {
     @SerializedName("id")
     private long id;
 
