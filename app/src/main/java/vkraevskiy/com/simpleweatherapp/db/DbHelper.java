@@ -16,7 +16,7 @@ final class DbHelper extends SQLiteOpenHelper {
     private static final String COMA_SEP = ",";
 
     private static final String CREATE_CITIES =
-            "CREATE TABLE " + City.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS" + City.TABLE_NAME + " (" +
                     City._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     City.COLUMN_NAME_CITY_NAME + TEXT_TYPE + COMA_SEP +
                     City.COLUMN_NAME_COUNTRY_NAME + TEXT_TYPE + COMA_SEP +
@@ -24,7 +24,7 @@ final class DbHelper extends SQLiteOpenHelper {
                     ")";
 
     private static final String CREATE_FORECASTS =
-            "CREATE TABLE " + Forecast.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS" + Forecast.TABLE_NAME + " (" +
                     Forecast.COLUMN_NAME_PRESSURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_TEMPERATURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_HUMIDITY + REAL_TYPE + COMA_SEP +
