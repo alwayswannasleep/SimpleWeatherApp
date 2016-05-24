@@ -12,6 +12,8 @@ public interface DbFacade {
 
     void saveCity(City city);
 
+    City getCityByID(long id);
+
     void saveForecast(List<Forecast> forecasts, City city);
 
     void addObserver(Observer observer);
@@ -19,4 +21,8 @@ public interface DbFacade {
     void deleteObserver(Observer observer);
 
     List<DailyForecast> getDailyForecasts();
+
+    <T> String saveTransferData(T object);
+
+    <T> T getTransferData(String key);
 }

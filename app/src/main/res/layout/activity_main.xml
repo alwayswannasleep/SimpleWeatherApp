@@ -16,6 +16,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/am_days_list"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="188dp"/>
 </LinearLayout>

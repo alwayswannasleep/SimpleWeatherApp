@@ -21,6 +21,16 @@ public class Forecast {
     @SerializedName("dt")
     private long timestamp;
 
+    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
     public Main getMain() {
         return main;
     }

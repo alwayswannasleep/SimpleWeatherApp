@@ -15,6 +15,7 @@ public final class DbManager extends Observable implements DbFacade {
 
     private CitiesDao citiesDao;
     private ForecastsDao forecastsDao;
+    private TransferStorage transferStorage;
 
     public DbManager(Context context) {
         DbHelper dbHelper = new DbHelper(context);
@@ -22,9 +23,9 @@ public final class DbManager extends Observable implements DbFacade {
         writableDatabase.setForeignKeyConstraintsEnabled(true);
 
         citiesDao = new CitiesDao(writableDatabase);
-        forecastsDao = new ForecastsDao(writableDatabase);
+        forecastsDao = new ForecastsDao(writableDatabase, this);
+        transferStorage = new TransferStorage();
     }
-
 
     @Override
     public void onStartLoading() {
@@ -41,6 +42,11 @@ public final class DbManager extends Observable implements DbFacade {
     }
 
     @Override
+    public City getCityByID(long id) {
+        return citiesDao.getCityByID(id);
+    }
+
+    @Override
     public void saveForecast(List<Forecast> forecasts, City city) {
         forecastsDao.save(forecasts, city);
 
@@ -51,5 +57,15 @@ public final class DbManager extends Observable implements DbFacade {
     @Override
     public List<DailyForecast> getDailyForecasts() {
         return forecastsDao.getDailyForecasts();
+    }
+
+    @Override
+    public <T> String saveTransferData(T object) {
+        return transferStorage.saveTransferData(object);
+    }
+
+    @Override
+    public <T> T getTransferData(String key) {
+        return transferStorage.getTransferData(key);
     }
 }

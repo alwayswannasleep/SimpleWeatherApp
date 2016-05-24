@@ -1,6 +1,7 @@
 package vkraevskiy.com.simpleweatherapp.db;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import vkraevskiy.com.simpleweatherapp.db.model.City;
@@ -24,5 +25,33 @@ final class CitiesDao {
                 null,
                 values,
                 SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    City getCityByID(long id) {
+        Cursor cursor = database.query(
+                DbHelper.City.TABLE_NAME,
+                null,
+                DbHelper.City._ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null
+        );
+
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
+
+        int cityNameIndex = cursor.getColumnIndex(DbHelper.City.COLUMN_NAME_CITY_NAME);
+        int countryNameIndex = cursor.getColumnIndex(DbHelper.City.COLUMN_NAME_COUNTRY_NAME);
+
+        City city = new City();
+
+        city.setName(cursor.getString(cityNameIndex));
+        city.setCountry(cursor.getString(countryNameIndex));
+
+        cursor.close();
+
+        return city;
     }
 }

@@ -20,6 +20,7 @@ android {
             minifyEnabled false
             debuggable true
 
+            buildConfigField "String", "IMAGE_BASE_URL", "\"http://openweathermap.org/img/w/\""
             buildConfigField "String", "API_URL", "\"http://api.openweathermap.org/\""
             buildConfigField "String", "API_KEY", "\"3140cb3ae69a07e4294164cee1cc9786\""
         }
@@ -31,7 +32,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
 }

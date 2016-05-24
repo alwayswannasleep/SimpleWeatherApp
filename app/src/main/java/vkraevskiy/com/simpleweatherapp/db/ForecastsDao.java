@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import vkraevskiy.com.simpleweatherapp.core.bridge.DbFacade;
 import vkraevskiy.com.simpleweatherapp.db.model.City;
 import vkraevskiy.com.simpleweatherapp.db.model.DailyForecast;
 import vkraevskiy.com.simpleweatherapp.db.model.Forecast;
@@ -20,10 +21,12 @@ final class ForecastsDao {
 
     private static final int DAYS_COUNT = 5;
 
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
+    private final DbFacade dbManager;
 
-    ForecastsDao(SQLiteDatabase database) {
+    ForecastsDao(SQLiteDatabase database, DbManager dbManager) {
         this.database = database;
+        this.dbManager = dbManager;
     }
 
     void save(List<Forecast> forecasts, City city) {
@@ -36,6 +39,7 @@ final class ForecastsDao {
                 values.put(DbHelper.Forecast.COLUMN_NAME_CLOUDINESS, forecast.getClouds().getCloudiness());
                 values.put(DbHelper.Forecast.COLUMN_NAME_PRESSURE, forecast.getMain().getPressure());
                 values.put(DbHelper.Forecast.COLUMN_NAME_TEMPERATURE, forecast.getMain().getTemp());
+                values.put(DbHelper.Forecast.COLUMN_NAME_HUMIDITY, forecast.getMain().getHumidity());
 
                 long value = forecast.getTimestamp() * 1000;
                 forecast.setTimestamp(value);
@@ -50,6 +54,7 @@ final class ForecastsDao {
 
                 values.put(DbHelper.Forecast.COLUMN_NAME_WIND_DEGREE, forecast.getWind().getDegree());
                 values.put(DbHelper.Forecast.COLUMN_NAME_WIND_SPEED, forecast.getWind().getSpeed());
+
 
                 database.insertWithOnConflict(
                         DbHelper.Forecast.TABLE_NAME,
@@ -67,7 +72,7 @@ final class ForecastsDao {
         }
     }
 
-    public List<DailyForecast> getDailyForecasts() {
+    List<DailyForecast> getDailyForecasts() {
         List<DailyForecast> dailyForecasts = new ArrayList<>(DAYS_COUNT);
 
         Calendar instance = Calendar.getInstance();
@@ -85,6 +90,7 @@ final class ForecastsDao {
             if (forecasts != null) {
                 DailyForecast dailyForecast = new DailyForecast();
                 dailyForecast.setForecasts(forecasts);
+                dailyForecast.setCity(forecasts.get(0).getCity());
 
                 dailyForecasts.add(dailyForecast);
             }
@@ -105,6 +111,7 @@ final class ForecastsDao {
             return null;
         }
 
+        int cityId = cursor.getColumnIndex(DbHelper.Forecast.COLUMN_NAME_CITY_ID);
         int cloudinessIndex = cursor.getColumnIndex(DbHelper.Forecast.COLUMN_NAME_CLOUDINESS);
         int humidityIndex = cursor.getColumnIndex(DbHelper.Forecast.COLUMN_NAME_HUMIDITY);
         int pressureIndex = cursor.getColumnIndex(DbHelper.Forecast.COLUMN_NAME_PRESSURE);
@@ -147,6 +154,9 @@ final class ForecastsDao {
             clouds.setCloudiness(cloudinessIndex);
 
             forecast.setClouds(clouds);
+
+            City city = dbManager.getCityByID(cursor.getLong(cityId));
+            forecast.setCity(city);
 
             forecasts.add(forecast);
         } while (cursor.moveToNext());

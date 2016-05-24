@@ -12,6 +12,7 @@ public final class LocationManager {
     }
 
     public Location getLastLocation() {
+        //noinspection MissingPermission
         return service.getLastKnownLocation(android.location.LocationManager.PASSIVE_PROVIDER);
     }
 }

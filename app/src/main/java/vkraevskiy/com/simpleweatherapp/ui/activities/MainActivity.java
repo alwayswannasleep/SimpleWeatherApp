@@ -18,16 +18,16 @@ import java.util.Observer;
 
 import vkraevskiy.com.simpleweatherapp.R;
 import vkraevskiy.com.simpleweatherapp.core.WApplication;
+import vkraevskiy.com.simpleweatherapp.core.bridge.ActivityBridge;
 import vkraevskiy.com.simpleweatherapp.core.callback.SimpleNetCallback;
 import vkraevskiy.com.simpleweatherapp.db.model.DailyForecast;
 import vkraevskiy.com.simpleweatherapp.ui.adapter.DaysAdapter;
+import vkraevskiy.com.simpleweatherapp.ui.fragments.DailyForecastFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityBridge {
 
     private static final int REQUEST_CODE = 100;
 
-    private WApplication application;
-    private RecyclerView recyclerView;
     private DaysAdapter adapter;
 
     private Observer observer;
@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        application = (WApplication) getApplication();
 
         initView();
 
@@ -45,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        Location location = application.getLocationManager().getLastLocation();
+        Location location = getWApplication().getLocationManager().getLastLocation();
         loadData(location);
     }
 
     @SuppressWarnings("ConstantConditions")
     private void initView() {
-        recyclerView = (RecyclerView) findViewById(R.id.am_days_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.am_days_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setFitsSystemWindows(true);
 
@@ -67,7 +66,31 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         observer = new DbObserver();
-        application.getDbFacade().addObserver(observer);
+        getWApplication().getDbFacade().addObserver(observer);
+
+        adapter.setOnItemSelectedListener(new DaysAdapter.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(DailyForecast forecast) {
+                launchDailyForecastFragment(forecast);
+            }
+        });
+    }
+
+    @Override
+    public WApplication getWApplication() {
+        return (WApplication) getApplication();
+    }
+
+    private void launchDailyForecastFragment(DailyForecast forecast) {
+        DailyForecastFragment fragment = new DailyForecastFragment();
+        Bundle bundle = DailyForecastFragment.buildArguments(getWApplication().getDbFacade().saveTransferData(forecast));
+
+        fragment.setArguments(bundle);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.am_fragment_container, fragment, null)
+                .commitAllowingStateLoss();
     }
 
     @Override
@@ -86,12 +109,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        Location location = application.getLocationManager().getLastLocation();
+        Location location = getWApplication().getLocationManager().getLastLocation();
         loadData(location);
     }
 
     private void loadData(Location location) {
-        application.getNetFacade().loadForecast(location.getLatitude(), location.getLongitude(), new SimpleNetCallback() {
+        getWApplication().getNetFacade().loadForecast(location.getLatitude(), location.getLongitude(), new SimpleNetCallback() {
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
@@ -105,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onDataUpdated() {
-        final List<DailyForecast> dailyForecasts = application.getDbFacade().getDailyForecasts();
+        final List<DailyForecast> dailyForecasts = getWApplication().getDbFacade().getDailyForecasts();
 
         if (dailyForecasts == null) {
             return;
@@ -115,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 adapter.swapData(dailyForecasts);
+
+                launchDailyForecastFragment(dailyForecasts.get(0));
             }
         });
     }
@@ -123,8 +148,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        application.getDbFacade().deleteObserver(observer);
+        getWApplication().getDbFacade().deleteObserver(observer);
         observer = null;
+
+        adapter.removeOnItemSelectedListener();
     }
 
     private final class DbObserver implements Observer {
