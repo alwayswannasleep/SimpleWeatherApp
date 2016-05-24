@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Observer;
 
 import vkraevskiy.com.simpleweatherapp.db.model.City;
+import vkraevskiy.com.simpleweatherapp.db.model.DailyForecast;
 import vkraevskiy.com.simpleweatherapp.db.model.Forecast;
 
 public interface DbFacade {
@@ -16,4 +17,6 @@ public interface DbFacade {
     void addObserver(Observer observer);
 
     void deleteObserver(Observer observer);
+
+    List<DailyForecast> getDailyForecasts();
 }

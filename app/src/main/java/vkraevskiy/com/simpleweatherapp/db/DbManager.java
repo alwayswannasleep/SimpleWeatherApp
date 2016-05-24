@@ -8,6 +8,7 @@ import java.util.Observable;
 
 import vkraevskiy.com.simpleweatherapp.core.bridge.DbFacade;
 import vkraevskiy.com.simpleweatherapp.db.model.City;
+import vkraevskiy.com.simpleweatherapp.db.model.DailyForecast;
 import vkraevskiy.com.simpleweatherapp.db.model.Forecast;
 
 public final class DbManager extends Observable implements DbFacade {
@@ -45,5 +46,10 @@ public final class DbManager extends Observable implements DbFacade {
 
         setChanged();
         notifyObservers();
+    }
+
+    @Override
+    public List<DailyForecast> getDailyForecasts() {
+        return forecastsDao.getDailyForecasts();
     }
 }

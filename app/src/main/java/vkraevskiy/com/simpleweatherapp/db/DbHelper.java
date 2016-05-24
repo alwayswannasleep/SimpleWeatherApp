@@ -27,6 +27,7 @@ final class DbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + Forecast.TABLE_NAME + " (" +
                     Forecast.COLUMN_NAME_PRESSURE + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_TEMPERATURE + REAL_TYPE + COMA_SEP +
+                    Forecast.COLUMN_NAME_HUMIDITY + REAL_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_CITY_ID + INTEGER_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WEATHER_ID + INTEGER_TYPE + COMA_SEP +
                     Forecast.COLUMN_NAME_WEATHER_DESCRIPTION + TEXT_TYPE + COMA_SEP +
@@ -88,5 +89,6 @@ final class DbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_TEMPERATURE = "temp";
         public static final String COLUMN_NAME_PRESSURE = "pressure";
         public static final String COLUMN_NAME_CLOUDINESS = "cloudiness";
+        public static final String COLUMN_NAME_HUMIDITY = "humidity";
     }
 }
